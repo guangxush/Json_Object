@@ -1,11 +1,18 @@
 package com.example.json.Dao;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Created by gshan on 2018/8/10
  */
 public class Truck {
+    //@JsonProperty(value= "VIN")
     private String VIN;
+
+    //@JsonProperty(value= "color")
     private String color;
+
+    //@JsonProperty(value= "miles")
     private Integer miles;
 
     public String getVIN() {

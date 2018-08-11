@@ -1,19 +1,26 @@
 package com.example.json.Dao;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Created by gshan on 2018/8/10
  */
 public class Car {
-    private String VIN;
+    //@JsonProperty(value= "VIN")
+    private String vIN;
+
+    //@JsonProperty(value= "color")
     private String color;
+
+    //@JsonProperty(value= "miles")
     private Integer miles;
 
     public String getVIN() {
-        return VIN;
+        return vIN;
     }
 
-    public void setVIN(String VIN) {
-        this.VIN = VIN;
+    public void setVIN(String vIN) {
+        this.vIN = vIN;
     }
 
     public String getColor() {
@@ -35,7 +42,7 @@ public class Car {
     @Override
     public String toString() {
         return "Car{" +
-                "VIN='" + VIN + '\'' +
+                "VIN='" + vIN + '\'' +
                 ", color='" + color + '\'' +
                 ", miles=" + miles +
                 '}';
