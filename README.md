@@ -2,7 +2,7 @@
 Test JSON data transfer to JAVA Object using Spring Boot
 
 ## How to using postman to test json data
-1. Add Request 
+1. Using the postman menu on the left to "Add Request"
 2. Select "POST" and Params is "http://localhost:8080/vehicle/car"
 3. Headers add this: "KEY": Content-Type ; "VALUE": application/json
 4. Body add this:
