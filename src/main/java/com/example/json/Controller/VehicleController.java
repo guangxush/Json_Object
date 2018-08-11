@@ -17,6 +17,7 @@ import java.util.List;
 public class VehicleController {
     @RequestMapping(value = "/car", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
+    @ResponseBody
     public ResponseEntity<Car> getcar() {
 
         Car car = new Car();

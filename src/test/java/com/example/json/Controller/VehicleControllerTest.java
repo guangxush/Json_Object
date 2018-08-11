@@ -1,34 +1,35 @@
 package com.example.json.Controller;
 
+import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 /**
  * Created by gshan on 2018/8/11
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = {VehicleController.class})
-@EnableConfigurationProperties
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringBootTest
 public class VehicleControllerTest {
 
     private MockMvc mockMvc;
@@ -43,6 +44,23 @@ public class VehicleControllerTest {
     }
 
     @Test
+    public void testjson() throws Exception{
+        Map<String,Object> map = new HashMap<>();
+        map.put("color", "Blue");
+        map.put("miles", 300);
+        map.put("vin", "1234");
+        String json = JSONObject.toJSONString(map);
+        MvcResult result = mockMvc.perform(post("/vehicle/car")
+                .contentType(MediaType.APPLICATION_JSON_UTF8).content(json)
+                .accept(MediaType.APPLICATION_JSON_UTF8)) //执行请求
+                .andDo(print())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8)) //验证响应contentType
+                .andExpect(jsonPath("$.vin").value("1234"))
+                .andReturn();// 返回执行请求的结果
+        System.out.println(result.getResponse().getContentAsString());
+    }
+
+    @Test
     public void testupdatecar() throws Exception{
         Map<String,Object> map = new HashMap<>();
         map.put("color", "Blue");
@@ -50,26 +68,92 @@ public class VehicleControllerTest {
         map.put("vin", "1234");
         String json = JSONObject.toJSONString(map);
         MvcResult result = mockMvc.perform(post("/vehicle/car")
-                .contentType(MediaType.APPLICATION_JSON).content(json))
-                .andExpect(status().isOk())// 模拟向testRest发送post请求
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))// 预期返回值的媒体类型text/plain;charset=UTF-8
+                .contentType(MediaType.APPLICATION_JSON_UTF8).content(json)
+                .accept(MediaType.APPLICATION_JSON_UTF8)) //执行请求
+                .andDo(print())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8)) //验证响应contentType
                 .andExpect(jsonPath("$.miles").value(400))
                 .andReturn();// 返回执行请求的结果
         System.out.println(result.getResponse().getContentAsString());
     }
 
     @Test
-    public void testupdatecartest() throws Exception{
+    public void testgetcar() throws Exception{
+        MvcResult result = mockMvc.perform(get("/vehicle/car")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON_UTF8)) //执行请求
+                .andDo(print())
+                .andReturn();// 返回执行请求的结果
+        System.out.println(result.getResponse().getContentAsString());
+    }
+
+    @Test
+    public void testupdatecars() throws Exception{
+        Map<String,Object> map1 = new HashMap<>();
+        map1.put("color", "Blue");
+        map1.put("miles", 300);
+        map1.put("vin", "1234");
+        Map<String,Object> map2 = new HashMap<>();
+        map2.put("color", "Red");
+        map2.put("miles", 300);
+        map2.put("vin", "1235");
+        List<Map> jsonArray = new ArrayList<Map>();
+        jsonArray.add(map1);
+        jsonArray.add(map2);
+        String json = JSONArray.toJSONString(jsonArray);
+        System.out.println(json);
+        /**String json = "[\n" +
+                "  {\n" +
+                "    \"color\":\"Blue\",\n" +
+                "    \"miles\":200,\n" +
+                "    \"vin\":\"1234\"\n" +
+                "  },\n" +
+                "  {\n" +
+                "    \"color\":\"Red\",\n" +
+                "    \"miles\":500,\n" +
+                "    \"vin\":\"1235\"\n" +
+                "  }\n" +
+                "]";**/
+        MvcResult result = mockMvc.perform(post("/vehicle/cars")
+                .contentType(MediaType.APPLICATION_JSON_UTF8).content(json)
+                .accept(MediaType.APPLICATION_JSON_UTF8)) //执行请求
+                .andDo(print())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8)) //验证响应contentType
+                .andReturn();// 返回执行请求的结果
+        System.out.println("*****************");
+        System.out.println(result.getResponse().getContentAsString());
+    }
+
+    @Test
+    public void testupdateWithMultipleObjects() throws Exception{
         Map<String,Object> map = new HashMap<>();
-        map.put("color", "Blue");
-        map.put("miles", 300);
-        map.put("vin", "1234");
+        Map<String,Object> map1 = new HashMap<>();
+        map1.put("color", "Blue");
+        map1.put("miles", 100);
+        map1.put("vin", "1234");
+        Map<String,Object> map2 = new HashMap<>();
+        map2.put("color", "Red");
+        map2.put("miles", 200);
+        map2.put("vin", "1235");
+        List<Map> jsonArray = new ArrayList<>();
+        jsonArray.add(map1);
+        jsonArray.add(map2);
+
+        Map<String,Object> map3 = new HashMap<>();
+        map3.put("color", "Green");
+        map3.put("miles", 300);
+        map3.put("vin", "1236");
+
+        map.put("cars",jsonArray);
+        map.put("truck",map3);
+
         String json = JSONObject.toJSONString(map);
-        MvcResult result = mockMvc.perform(post("/vehicle/car")
-                .contentType(MediaType.APPLICATION_JSON).content(json)
-                .accept(MediaType.APPLICATION_JSON)) //执行请求
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON)) //验证响应contentType
-                .andExpect(jsonPath("$.miles").value(300))
+        System.out.println(json);
+        MvcResult result = mockMvc.perform(post("/vehicle/carsandtrucks")
+                .contentType(MediaType.APPLICATION_JSON_UTF8).content(json)
+                .accept(MediaType.APPLICATION_JSON_UTF8)) //执行请求
+                .andDo(print())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8)) //验证响应contentType
                 .andReturn();// 返回执行请求的结果
         System.out.println(result.getResponse().getContentAsString());
     }

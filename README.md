@@ -5,7 +5,7 @@ Test JSON data transfer to JAVA Object using Spring Boot
 1. Using the postman menu on the left to "Add Request"
 2. Select "POST" and Params is "http://localhost:8080/vehicle/car"
 3. Headers add this: "KEY": Content-Type ; "VALUE": application/json
-4. Body add this:
+4. Body select the raw and add this:
     ```json
     {
         "color": "Blue",
