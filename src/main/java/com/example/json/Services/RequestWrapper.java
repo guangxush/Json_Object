@@ -3,14 +3,14 @@ package com.example.json.Services;
 
 import com.example.json.Dao.Car;
 import com.example.json.Dao.Truck;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 /**
  * Created by gshan on 2018/8/10
  */
-@Component
+@Service
 public class RequestWrapper {
     List<Car> cars;
     Truck truck;
