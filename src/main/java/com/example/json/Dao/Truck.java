@@ -1,10 +1,12 @@
 package com.example.json.Dao;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.stereotype.Component;
 
 /**
  * Created by gshan on 2018/8/10
  */
+@Component
 public class Truck {
     //@JsonProperty(value= "VIN")
     private String VIN;

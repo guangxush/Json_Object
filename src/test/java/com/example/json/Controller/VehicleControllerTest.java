@@ -1,5 +1,9 @@
 package com.example.json.Controller;
 
+import com.example.json.Dao.Car;
+import com.example.json.Dao.Truck;
+import com.example.json.Services.RequestWrapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import org.junit.Before;
@@ -23,7 +27,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 /**
  * Created by gshan on 2018/8/11
  */
@@ -37,6 +40,17 @@ public class VehicleControllerTest {
     @Autowired
     private WebApplicationContext wac;
 
+    @Autowired
+    private Car car;
+
+    @Autowired
+    private Truck truck;
+
+    @Autowired
+    private RequestWrapper requestWrapper;
+
+    @Autowired
+    private ObjectMapper mapper;
 
     @Before
     public void setup() {
@@ -48,14 +62,14 @@ public class VehicleControllerTest {
         Map<String,Object> map = new HashMap<>();
         map.put("color", "Blue");
         map.put("miles", 300);
-        map.put("VIN", "1234");
+        map.put("vIN", "1234");
         String json = JSONObject.toJSONString(map);
         MvcResult result = mockMvc.perform(post("/vehicle/car")
                 .contentType(MediaType.APPLICATION_JSON_UTF8).content(json)
                 .accept(MediaType.APPLICATION_JSON_UTF8))
                 .andDo(print())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8)) //验证响应contentType
-                .andExpect(jsonPath("$.VIN").value("1234"))
+                .andExpect(jsonPath("$.vIN").value("1234"))
                 .andReturn();
         System.out.println(result.getResponse().getContentAsString());
     }
@@ -156,5 +170,52 @@ public class VehicleControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8)) //验证响应contentType
                 .andReturn();// 返回执行请求的结果
         System.out.println(result.getResponse().getContentAsString());
+    }
+
+
+    //test Object transfer to json
+    @Test
+    public void testupdateWithMultipleObjectsUsingObject() throws Exception{
+        List<Car> carArray = new ArrayList<>();
+        car.setColor("Blue");
+        car.setMiles(100);
+        car.setVIN("1234");
+
+        carArray.add(car);
+
+        car.setColor("Red");
+        car.setMiles(200);
+        car.setVIN("1235");
+
+        carArray.add(car);
+        requestWrapper.setCars(carArray);
+
+        truck.setColor("Green");
+        truck.setMiles(400);
+        truck.setVIN("1236");
+
+        requestWrapper.setTruck(truck);
+        System.out.println("JSON to Object:"+requestWrapper.toString());
+        String json = "";
+        try{
+            json = mapper.writeValueAsString(requestWrapper);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        System.out.println(json);
+        MvcResult result = mockMvc.perform(post("/vehicle/carsandtrucks")
+                .contentType(MediaType.APPLICATION_JSON_UTF8).content(json)
+                .accept(MediaType.APPLICATION_JSON_UTF8)) //执行请求
+                .andDo(print())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8)) //验证响应contentType
+                .andReturn();// 返回执行请求的结果
+        String returnjson = result.getResponse().getContentAsString();
+        System.out.println(returnjson);
+        try{
+            requestWrapper = mapper.readValue(returnjson, RequestWrapper.class);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        System.out.println("JSON to Object:"+requestWrapper.toString());
     }
 }
