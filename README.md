@@ -1,4 +1,4 @@
-# Json_Object
+# SpringBoot_Json
 Test JSON data transfer to JAVA Object using Spring Boot
 
 ## How to using postman to test json data
