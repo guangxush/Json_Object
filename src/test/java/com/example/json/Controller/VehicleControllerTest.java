@@ -68,7 +68,7 @@ public class VehicleControllerTest {
                 .contentType(MediaType.APPLICATION_JSON_UTF8).content(json)
                 .accept(MediaType.APPLICATION_JSON_UTF8))
                 .andDo(print())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8)) //验证响应contentType
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$.vIN").value("1234"))
                 .andReturn();
         System.out.println(result.getResponse().getContentAsString());
@@ -79,15 +79,16 @@ public class VehicleControllerTest {
         Map<String,Object> map = new HashMap<>();
         map.put("color", "Blue");
         map.put("miles", 300);
+        //map.put("vIN", "1234");
         map.put("vin", "1234");
         String json = JSONObject.toJSONString(map);
         MvcResult result = mockMvc.perform(post("/vehicle/car")
                 .contentType(MediaType.APPLICATION_JSON_UTF8).content(json)
-                .accept(MediaType.APPLICATION_JSON_UTF8)) //执行请求
+                .accept(MediaType.APPLICATION_JSON_UTF8))
                 .andDo(print())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8)) //验证响应contentType
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$.miles").value(400))
-                .andReturn();// 返回执行请求的结果
+                .andReturn();
         System.out.println(result.getResponse().getContentAsString());
     }
 
@@ -95,9 +96,9 @@ public class VehicleControllerTest {
     public void testgetcar() throws Exception{
         MvcResult result = mockMvc.perform(get("/vehicle/car")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .accept(MediaType.APPLICATION_JSON_UTF8)) //执行请求
+                .accept(MediaType.APPLICATION_JSON_UTF8))
                 .andDo(print())
-                .andReturn();// 返回执行请求的结果
+                .andReturn();
         System.out.println(result.getResponse().getContentAsString());
     }
 
