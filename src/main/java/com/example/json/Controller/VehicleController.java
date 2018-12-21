@@ -15,7 +15,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/vehicle")
 public class VehicleController {
-    @RequestMapping(value = "/car", method = RequestMethod.GET)
+
+    @RequestMapping(value = "/car/get/", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
     @ResponseBody
     public ResponseEntity<Car> getcar() {
@@ -29,11 +30,11 @@ public class VehicleController {
     }
 
     @RequestMapping(value = "/car", method = RequestMethod.POST)
-    public ResponseEntity<Car> updatecar(@RequestBody Car car) {
+    public ResponseEntity<Car> updateCar(@RequestBody Car car) {
 
-        if (car != null) {
+        if (car != null&&car.getMiles()!=null) {
             car.setMiles(car.getMiles() + 100);
-            car.toString();
+            System.out.println(car.toString());
         }
         // TODO: call persistence layer to update
         return new ResponseEntity<Car>(car, HttpStatus.OK);

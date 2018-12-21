@@ -8,13 +8,13 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class Truck {
-    //@JsonProperty(value= "VIN")
+    @JsonProperty(value= "VIN")
     private String VIN;
 
-    //@JsonProperty(value= "color")
+    @JsonProperty(value= "color")
     private String color;
 
-    //@JsonProperty(value= "miles")
+    @JsonProperty(value= "miles")
     private Integer miles;
 
     public String getVIN() {

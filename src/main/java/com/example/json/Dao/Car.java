@@ -8,13 +8,13 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class Car {
-    //@JsonProperty(value= "VIN")
+    @JsonProperty(value= "VIN", required = true)
     private String VIN;
 
-    //@JsonProperty(value= "color")
+    @JsonProperty(value= "color")
     private String color;
 
-    //@JsonProperty(value= "miles")
+    @JsonProperty(value= "miles")
     private Integer miles;
 
     public String getVIN() {
@@ -44,7 +44,7 @@ public class Car {
     @Override
     public String toString() {
         return "Car{" +
-                "vIN='" + VIN + '\'' +
+                "VIN='" + VIN + '\'' +
                 ", color='" + color + '\'' +
                 ", miles=" + miles +
                 '}';

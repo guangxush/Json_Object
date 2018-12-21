@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title></title>
+    <script src="js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <!--<link rel="stylesheet" href="css/bootstrap.min.css">-->
+    <script src="js/jquery.js"></script>
+    <script type="text/javascript">
+        function submit_car() {
+            var form_data = getFormData($('#car_form'));
+            $.ajax({
+                url: "/vehicle/car",//url
+                type: "POST",//方法类型
+                dataType: "json",//预期服务器返回的数据类型
+                contentType: "application/json;charset=utf-8",
+                data:  JSON.stringify(form_data),
+                success: function (result) {
+                    console.log(result);//打印服务端返回的数据(调试用)
+                    alert("提交成功！！！");
+                    $('#miles').val(result['miles']);
+                },
+                error: function () {
+                    alert("提交失败！！！");
+                }
+            });
+        }
+        function getFormData($form) {
+            var unindexed_array = $form.serializeArray();
+            var indexed_array = {};
+            $.map(unindexed_array, function (n, i) {
+                indexed_array[n['name']] = n['value'];
+            });
+            return indexed_array;
+        }
+    </script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+<div id="form-div" class="container">
+    <form id="car_form" onsubmit="return false" action="##" method="post" class="form-group">
+        <h4>car表单提交</h4>
+        <p><h5>VIN：</h5><input name="vin" type="text" id="vin" tabindex="1" size="15" value=""
+                               class="form-control"/></p>
+        <p><h5>color：</h5><input name="color" type="text" id="color" tabindex="2" size="16" value=""
+                                 class="form-control"/>
+        </p>
+        <p><h5>miles：</h5><input name="miles" type="text" id="miles" tabindex="2" size="16" value=""
+                                 class="form-control" oninput="value=value.replace(/[^\d]/g,'')"/>
+        </p>
+        <p><input type="button" value="submit" onclick="submit_car()" class="btn btn-primary">&nbsp;
+            <input type="reset" value="reset"class="btn btn-primary">
+        </p>
+    </form>
+</div>
+</body>
+</html>
